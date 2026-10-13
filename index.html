@@ -1,0 +1,369 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#03040a">
+  <meta name="description" content="Midnight Birthday — A magical birthday surprise by 4U celebrations">
+  <title>Midnight Birthday | 4U celebrations</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="midnight-page">
+
+  <!-- Cinematic intro -->
+  <section class="intro" id="intro" aria-label="Birthday countdown">
+    <div class="intro-stars" id="introStars" aria-hidden="true"></div>
+    <div class="shooting-stars-layer" id="introShootingStars" aria-hidden="true"></div>
+    <div class="intro-vignette"></div>
+
+    <div class="intro-content">
+<!--      
+      <p class="intro-eyebrow" data-ar="هناك مفاجأة تنتظرك" data-en="SOMETHING IS WAITING FOR YOU">
+        هناك مفاجأة تنتظرك
+      </p>
+-->
+      <div class="countdown-number" id="countdownNumber" aria-live="polite">5</div>
+<!--
+      <p class="intro-caption" id="introCaption"
+         data-ar="استعد للحظة لا تُنسى"
+         data-en="GET READY FOR AN UNFORGETTABLE MOMENT">
+        استعد للحظة لا تُنسى
+      </p>
+-->
+    </div>
+
+    <!-- The only illuminated object before the reveal -->
+    <button class="mystery-gift" id="mysteryGift"
+            type="button"
+            aria-label="افتح الهدية"
+            data-ar-label="افتح الهدية"
+            data-en-label="Open the gift"
+            aria-describedby="giftInstruction">
+
+      <span class="gift-halo"></span>
+      <span class="gift-light-rays"></span>
+
+      <span class="mystery-gift-box">
+        <span class="gift-base">
+          <span class="gift-front-ribbon"></span>
+          <span class="gift-front-shine"></span>
+        </span>
+
+        <span class="gift-lid" id="giftLid">
+          <span class="gift-lid-ribbon"></span>
+          <span class="gift-bow gift-bow-left"></span>
+          <span class="gift-bow gift-bow-right"></span>
+          <span class="gift-bow-knot"></span>
+        </span>
+      </span>
+    </button>
+
+    <p class="gift-instruction" id="giftInstruction"
+       data-ar="افتح الصندوق"
+       data-en="Open the box">
+        افتح الصندوق
+    </p>
+
+    <p class="intro-bottom-mark">4U <span>CELEBRATIONS</span></p>
+  </section>
+
+  <!-- Main website header -->
+  <header class="site-header" id="siteHeader">
+    <a class="brand" href="https://mohvmed-imvm.github.io/4U-celebration/" aria-label="4U celebrations home">
+      <span class="brand-mark">4U</span>
+      <span class="brand-name">celebrations</span>
+    </a>
+
+    <div class="header-actions">
+      <button class="about-button" id="aboutButton" type="button"
+              data-ar="عن النموذج" data-en="About this template">
+        عن النموذج
+      </button>
+
+      <a class="header-order" id="headerOrder"
+         href="https://wa.me/201040275280"
+         target="_blank" rel="noopener noreferrer"
+         data-ar="اطلب موقعك" data-en="Order your site">
+        اطلب موقعك
+      </a>
+    </div>
+  </header>
+
+
+  <!-- About template modal -->
+  <div class="modal-overlay" id="aboutModal" aria-hidden="true">
+    <section class="about-modal" role="dialog" aria-modal="true"
+             aria-labelledby="aboutTitle">
+
+      <button class="modal-close" id="closeModal" type="button"
+              aria-label="إغلاق" data-ar-label="إغلاق" data-en-label="Close">
+        ×
+      </button>
+
+      <span class="modal-brand">4U celebrations</span>
+
+      <h2 id="aboutTitle" data-ar="عن النموذج" data-en="About this template">
+        عن النموذج
+      </h2>
+
+      <p data-ar="ده نموذج تجريبي لصفحة عيد ميلاد من 4U celebrations. الاسم والصور والرسالة والألوان والموسيقى والتفاصيل قابلة للتخصيص حسب طلبك."
+         data-en="This is a demo birthday page by 4U celebrations. The name, photos, message, colors, music, and other details can be customized for your order.">
+        ده نموذج تجريبي لصفحة عيد ميلاد من 4U celebrations. الاسم والصور والرسالة والألوان والموسيقى والتفاصيل قابلة للتخصيص حسب طلبك.
+      </p>
+
+      <a class="modal-order-button" id="modalOrderButton"
+         href="https://wa.me/201040275280"
+         target="_blank" rel="noopener noreferrer"
+         data-ar="اطلب موقعك دلوقتي" data-en="Order your site now">
+        اطلب موقعك دلوقتي
+      </a>
+    </section>
+  </div>
+
+
+  <!-- Main birthday experience -->
+  <main class="main-content" id="mainContent">
+  <div class="shooting-stars-layer" id="pageShootingStars" aria-hidden="true"></div>
+
+    <div class="ambient-background" aria-hidden="true">
+      <div class="ambient-orb orb-one"></div>
+      <div class="ambient-orb orb-two"></div>
+      <div class="ambient-orb orb-three"></div>
+      <div class="ambient-grid"></div>
+    </div>
+
+    <div class="particles-layer" id="particlesLayer" aria-hidden="true"></div>
+    <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+
+    <section class="birthday-hero" id="birthdayHero">
+
+      <p class="hero-overline"
+         data-ar="ليلة واحدة... وذكرى تدوم"
+         data-en="ONE NIGHT. A MEMORY FOREVER.">
+        ليلة واحدة... وذكرى تدوم
+      </p>
+
+      <h1 class="birthday-title" id="birthdayTitle">
+        <span class="title-small"
+              data-ar="الليلة دي" data-en="TONIGHT IS">
+          الليلة دي
+        </span>
+
+        <span class="title-name" id="birthdayName">user name</span>
+
+        <span class="title-highlight"
+              data-ar="كلها ليك" data-en="ALL ABOUT YOU">
+          كلها ليك
+        </span>
+      </h1>
+
+      <p class="birthday-subtitle" id="birthdaySubtitle"
+         data-ar="في لحظات بتعدّي... وفي لحظات بتفضل جوانا للأبد"
+         data-en="Some moments pass. Others stay with us forever.">
+        في لحظات بتعدّي... وفي لحظات بتفضل جوانا للأبد
+      </p>
+
+      <div class="hero-divider" aria-hidden="true">
+        <span></span><i>✦</i><span></span>
+      </div>
+
+    </section>
+
+
+    <!-- Creative photo constellation -->
+    <section class="memory-section" id="memorySection">
+
+      <div class="section-heading">
+        <span class="section-kicker"
+              data-ar="لحظات تستحق أن تُحفظ"
+              data-en="MOMENTS WORTH KEEPING">
+          لحظات تستحق أن تُحفظ
+        </span>
+
+        <h2 data-ar="صورك اللي عمرها ما فارقت بالي" data-en="Your pictures that have never left my mind">
+           صورك اللي عمرها ما فارقت بالي 
+        </h2>
+
+        <p data-ar="كل صورة حكاية... وكل حكاية ليها مكان"
+           data-en="Every picture tells a story. Every story belongs somewhere.">
+          كل صورة حكاية... وكل حكاية ليها مكان
+        </p>
+      </div>
+
+      <div class="memory-gallery">
+
+        <figure class="memory-card memory-card-main">
+          <div class="memory-photo-wrap">
+            <img src="photo1.jpg"
+                 alt="ذكرى مميزة"
+                 class="memory-photo"
+                 loading="lazy">
+            <span class="photo-glint"></span>
+          </div>
+          <figcaption data-ar="لحظة من العمر" data-en="A MOMENT TO REMEMBER">
+            لحظة من العمر
+          </figcaption>
+        </figure>
+
+        <figure class="memory-card memory-card-top">
+          <div class="memory-photo-wrap">
+            <img src="photo2.jpg"
+                 alt="ذكرى جميلة"
+                 class="memory-photo"
+                 loading="lazy">
+            <span class="photo-glint"></span>
+          </div>
+          <figcaption data-ar="تفاصيل صغيرة" data-en="LITTLE DETAILS">
+            تفاصيل صغيرة
+          </figcaption>
+        </figure>
+
+        <figure class="memory-card memory-card-side">
+          <div class="memory-photo-wrap">
+            <img src="photo3.jpg"
+                 alt="صورة من الذكريات"
+                 class="memory-photo"
+                 loading="lazy">
+            <span class="photo-glint"></span>
+          </div>
+          <figcaption data-ar="أيام حلوة" data-en="THE GOOD DAYS">
+            أيام حلوة
+          </figcaption>
+        </figure>
+
+        <figure class="memory-card memory-card-bottom">
+          <div class="memory-photo-wrap">
+            <img src="photo4.jpg"
+                 alt="ذكرى لا تنسى"
+                 class="memory-photo"
+                 loading="lazy">
+            <span class="photo-glint"></span>
+          </div>
+          <figcaption data-ar="ذكرى لا تنسى" data-en="NEVER FORGOTTEN">
+            ذكرى لا تنسى
+          </figcaption>
+        </figure>
+
+        <figure class="memory-card memory-card-last">
+          <div class="memory-photo-wrap">
+            <img src="photo5.jpg"
+                 alt="صورة خاصة"
+                 class="memory-photo"
+                 loading="lazy">
+            <span class="photo-glint"></span>
+          </div>
+          <figcaption data-ar="والأجمل لسه جاي" data-en="THE BEST IS YET TO COME">
+            والأجمل لسه جاي
+          </figcaption>
+        </figure>
+
+        <div class="gallery-decoration gallery-star star-one" aria-hidden="true">✦</div>
+        <div class="gallery-decoration gallery-star star-two" aria-hidden="true">✧</div>
+        <div class="gallery-decoration gallery-ring" aria-hidden="true"></div>
+      </div>
+
+    </section>
+
+
+    <!-- Birthday message -->
+    <section class="birthday-message-section" id="messageSection">
+
+      <div class="message-decoration" aria-hidden="true">✦</div>
+
+      <div class="message-card" id="messageCard">
+        <span class="message-top-label"
+              data-ar="احلي يوم عدا عليا في حياتي"
+              data-en="The best day of my life.">
+           احلي يوم عدا عليا في حياتي  
+        </span>
+
+        <h2 data-ar="كل سنه وانت احلي حاجه في حياتي" data-en="Year after year, you remain the best thing in my life.">
+          كل سنه وانت احلي حاجه في حياتي 
+        </h2>
+
+        <div class="message-rule" aria-hidden="true">
+          <span></span><i>✧</i><span></span>
+        </div>
+
+        <p class="personal-message" id="personalMessage"
+           data-ar="هنا تكتب رسالتك"
+           data-en="Write your message here.">
+           هنا تكتب رسالتك
+        </p>
+
+        <span class="message-signature"
+              data-ar="انت♡هو"
+              data-en="Sender ♡ Recipient">
+          انت♡هو
+        </span>
+      </div>
+
+    </section>
+
+
+    <!-- Music controls -->
+    <section class="music-section" id="musicSection">
+      <audio id="birthdayMusic" src="birtdayMusic.mp3" loop preload="none"></audio>
+
+      <button class="music-button" id="musicButton" type="button"
+              aria-pressed="false">
+        <span class="music-icon" id="musicIcon" aria-hidden="true">♫</span>
+        <span id="musicButtonText"
+              data-ar="شغّل موسيقى الذكريات"
+              data-en="PLAY THE MUSIC">
+          شغّل موسيقى الذكريات
+        </span>
+      </button>
+
+      <p class="music-note"
+         data-ar="اختياري — شغّل الموسيقى وقت ما تحب"
+         data-en="OPTIONAL — PLAY IT WHENEVER YOU LIKE">
+        اختياري — شغّل الموسيقى وقت ما تحب
+      </p>
+    </section>
+
+
+    <!-- Custom order -->
+    <section class="order-section" id="order">
+      <span class="order-kicker"
+            data-ar="حوّل فكرتك لهدية"
+            data-en="Turn your idea into a gift">
+        حوّل فكرتك لهدية
+      </span>
+
+      <h2 data-ar="اعمل هدية مختلفة" data-en="Create a unique gift">
+        اعمل هدية مختلفة
+      </h2>
+
+      <p data-ar="اسم وصور ورسالة واغنية من اختيارك — صفحة معمولة مخصوص للشخص اللي بتحبه"
+         data-en="Your name, photos, songs, and message — a page created especially for the person you love.">
+        اسم وصور ورسالة واغنية من اختيارك — صفحة معمولة مخصوص للشخص اللي بتحبه
+      </p>
+
+      <a class="order-button" id="orderButton"
+         href="https://wa.me/201040275280"
+         target="_blank" rel="noopener noreferrer"
+         data-ar="اطلب موقعك على واتساب"
+         data-en="ORDER YOUR SITE ON WHATSAPP">
+        اطلب موقعك على واتساب
+      </a>
+    </section>
+
+    <footer class="site-footer">
+      <span class="footer-made">made with       
+        <a href="https://mohvmed-imvm.github.io/4U-celebration/"
+         class="footer-brand">4U</a></span>
+    </footer>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
