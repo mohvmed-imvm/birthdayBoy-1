@@ -2185,3 +2185,174 @@ a:focus-visible {
   position: relative;
   z-index: 2;
 }
+
+/* =========================================
+   ORDER CUSTOMIZATION — 4U
+========================================= */
+
+.customization-section {
+  position: relative;
+  z-index: 2;
+  padding: 55px 22px 65px;
+  border-top: 1px solid rgba(146, 183, 239, 0.14);
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(34, 69, 137, 0.18), transparent 65%),
+    rgba(4, 8, 19, 0.82);
+  text-align: center;
+  scroll-margin-top: 90px;
+}
+
+.customization-section h2 {
+  margin-top: 14px;
+  color: #eef4ff;
+  font-family: var(--font-en), var(--font-ar), serif;
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 500;
+}
+
+.customization-description {
+  max-width: 530px;
+  margin: 12px auto 25px;
+  color: #94a4c2;
+  font-size: 12px;
+  line-height: 2.2;
+}
+
+.order-number-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: min(100%, 480px);
+  margin: 0 auto 24px;
+  padding: 15px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: rgba(17, 30, 57, 0.65);
+  color: #aebfdf;
+  font-size: 12px;
+}
+
+.order-number-card strong {
+  color: var(--blue-light);
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  letter-spacing: 1px;
+  overflow-wrap: anywhere;
+}
+
+.customization-label {
+  display: block;
+  width: min(100%, 600px);
+  margin: 0 auto 10px;
+  color: #dce8ff;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: start;
+}
+
+.customization-textarea {
+  display: block;
+  width: min(100%, 600px);
+  min-height: 190px;
+  margin: 0 auto;
+  padding: 17px;
+  border: 1px solid rgba(144, 187, 255, 0.3);
+  border-radius: 14px;
+  outline: none;
+  background: rgba(5, 11, 25, 0.88);
+  color: #edf4ff;
+  font: 13px/2 var(--font-ar);
+  text-align: start;
+  resize: vertical;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+[dir="ltr"] .customization-textarea {
+  font-family: var(--font-en), var(--font-ar), serif;
+}
+
+.customization-textarea:focus {
+  border-color: rgba(125, 181, 255, 0.8);
+  box-shadow: 0 0 0 3px rgba(76, 145, 255, 0.1);
+}
+
+.customization-hint {
+  width: min(100%, 600px);
+  margin: 10px auto 0;
+  color: #7f91b1;
+  font-size: 11px;
+  line-height: 1.9;
+  text-align: start;
+}
+
+.customization-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.customization-actions .order-button {
+  margin-top: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.copy-order-button {
+  border-color: rgba(144, 187, 255, 0.45);
+  color: #dceaff;
+  background: rgba(19, 35, 67, 0.85);
+  box-shadow: none;
+}
+
+.copy-order-button:hover {
+  border-color: rgba(154, 200, 255, 0.8);
+  background: rgba(34, 58, 103, 0.9);
+}
+
+.send-order-button {
+  border-color: rgba(115, 170, 255, 0.7);
+}
+
+.form-status {
+  min-height: 24px;
+  margin: 15px auto 0;
+  color: #b9d6ff;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@media (max-width: 520px) {
+  .customization-section {
+    padding: 42px 18px 48px;
+    scroll-margin-top: 75px;
+  }
+
+  .customization-section h2 {
+    font-size: 30px;
+  }
+
+  .customization-description {
+    font-size: 11px;
+  }
+
+  .customization-textarea {
+    min-height: 180px;
+    padding: 13px;
+    font-size: 12px;
+  }
+
+  .customization-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .customization-actions .order-button {
+    width: 100%;
+    min-height: 46px;
+    font-size: 11px;
+  }
+}
