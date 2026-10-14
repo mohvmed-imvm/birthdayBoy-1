@@ -2,7 +2,7 @@
 "use strict";
 
 /* =========================================
-   ELEMENTS
+   ELEMENT
 ========================================= */
 
 const intro = document.getElementById("intro");
