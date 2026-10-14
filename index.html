@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#03040a">
   <meta name="description" content="Midnight Birthday — A magical birthday surprise by 4U celebrations">
-  <title>BirthdayBoy Surprise | 4U celebrations</title>
+  <title>Midnight Birthday | 4U celebrations</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,8 +88,8 @@
       </button>
 
       <a class="header-order" id="headerOrder"
-         href="https://wa.me/201040275280"
-         target="_blank" rel="noopener noreferrer"
+         href="#customization"
+         data-scroll-customization
          data-ar="اطلب موقعك" data-en="Order your site">
         اطلب موقعك
       </a>
@@ -119,8 +119,8 @@
       </p>
 
       <a class="modal-order-button" id="modalOrderButton"
-         href="https://wa.me/201040275280"
-         target="_blank" rel="noopener noreferrer"
+         href="#customization"
+         data-scroll-customization
          data-ar="اطلب موقعك دلوقتي" data-en="Order your site now">
         اطلب موقعك دلوقتي
       </a>
@@ -310,7 +310,7 @@
 
     <!-- Music controls -->
     <section class="music-section" id="musicSection">
-      <audio id="birthdayMusic" src="birthdayMusic.mp3" loop preload="none"></audio>
+      <audio id="birthdayMusic" src="birtdayMusic.mp3" loop preload="none"></audio>
 
       <button class="music-button" id="musicButton" type="button"
               aria-pressed="false">
@@ -348,13 +348,77 @@
       </p>
 
       <a class="order-button" id="orderButton"
-         href="https://wa.me/201040275280"
-         target="_blank" rel="noopener noreferrer"
+         href="#customization"
+         data-scroll-customization
          data-ar="اطلب موقعك على واتساب"
          data-en="ORDER YOUR SITE ON WHATSAPP">
         اطلب موقعك على واتساب
       </a>
     </section>
+    
+<!-- Order customization -->
+<section class="customization-section" id="customization">
+  <span class="order-kicker"
+        data-ar="خطوة واحدة تفصلك عن هديتك"
+        data-en="ONE STEP CLOSER TO YOUR GIFT">
+    خطوة واحدة تفصلك عن هديتك
+  </span>
+
+  <h2 data-ar="تفاصيل طلبك" data-en="Your Order Details">
+    تفاصيل طلبك
+  </h2>
+
+  <p class="customization-description"
+     data-ar="اكتب التفاصيل اللي حابب تظهر في صفحة الهدية. تقدر تعدلها قبل إرسال الطلب."
+     data-en="Write the details you want on your gift page. You can edit them before submitting.">
+    اكتب التفاصيل اللي حابب تظهر في صفحة الهدية. تقدر تعدلها قبل إرسال الطلب.
+  </p>
+
+  <div class="order-number-card">
+    <span data-ar="رقم طلبك" data-en="Your Order Number">رقم طلبك</span>
+    <strong id="orderNumber">جارٍ الإنشاء...</strong>
+  </div>
+
+  <label class="customization-label"
+         for="customizationText"
+         data-ar="بيانات التخصيص"
+         data-en="Customization Details">
+    بيانات التخصيص
+  </label>
+
+  <textarea id="customizationText"
+            class="customization-textarea"
+            rows="8"
+            data-placeholder-ar="اكتب تفاصيل طلبك هنا"
+            data-placeholder-en="Enter your order details here"
+            placeholder="اكتب تفاصيل طلبك هنا"
+            spellcheck="true"></textarea>
+
+  <p class="customization-hint"
+     data-ar="اكتب بياناتك بعد كل عنوان، وسيتم إرسال التفاصيل المكتوبة فقط."
+     data-en="Fill in your details after each label. Your entered details will be included in the message.">
+    اكتب بياناتك بعد كل عنوان، وسيتم إرسال التفاصيل المكتوبة فقط.
+  </p>
+
+  <div class="customization-actions">
+    <button class="order-button copy-order-button"
+            id="copyOrder" type="button"
+            data-ar="نسخ بيانات الطلب"
+            data-en="Copy Order Details">
+      نسخ بيانات الطلب
+    </button>
+
+    <button class="order-button send-order-button"
+            id="sendOrder" type="button"
+            data-ar="إرسال الطلب على واتساب"
+            data-en="Send Order on WhatsApp">
+      إرسال الطلب على واتساب
+    </button>
+  </div>
+
+  <p class="form-status" id="formStatus"
+     role="status" aria-live="polite"></p>
+</section>
 
     <footer class="site-footer">
       <span class="footer-made">made with       
