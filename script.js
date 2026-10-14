@@ -1,12 +1,9 @@
 
-/* =========================================
-   MIDNIGHT BIRTHDAY — 4U celebrations
-   Complete interactions and language system
-========================================= */
-
 "use strict";
 
-/* ---------- Elements ---------- */
+/* =========================================
+   ELEMENTS
+========================================= */
 
 const intro = document.getElementById("intro");
 const introStars = document.getElementById("introStars");
@@ -22,10 +19,6 @@ const mainContent = document.getElementById("mainContent");
 const aboutButton = document.getElementById("aboutButton");
 const aboutModal = document.getElementById("aboutModal");
 const closeModal = document.getElementById("closeModal");
-const modalOrderButton = document.getElementById("modalOrderButton");
-
-const headerOrder = document.getElementById("headerOrder");
-const orderButton = document.getElementById("orderButton");
 
 const birthdayMusic = document.getElementById("birthdayMusic");
 const musicButton = document.getElementById("musicButton");
@@ -34,15 +27,18 @@ const musicIcon = document.getElementById("musicIcon");
 
 const particlesLayer = document.getElementById("particlesLayer");
 const confettiLayer = document.getElementById("confettiLayer");
-
 const birthdayName = document.getElementById("birthdayName");
-const birthdayTitle = document.getElementById("birthdayTitle");
+
+const customizationText = document.getElementById("customizationText");
+const orderNumberElement = document.getElementById("orderNumber");
+const formStatus = document.getElementById("formStatus");
+const copyOrderButton = document.getElementById("copyOrder");
+const sendOrderButton = document.getElementById("sendOrder");
 
 const WHATSAPP_NUMBER = "201040275280";
 const LANGUAGE_KEY = "4u-language";
-
-
-/* ---------- State ---------- */
+const TEMPLATE_ID = "boy-birthday";
+const ORDER_STORAGE_KEY = "4u-order-" + TEMPLATE_ID;
 
 let currentLanguage = "ar";
 let giftOpened = false;
@@ -52,6 +48,7 @@ let lastFocusedElement = null;
 let modalIsOpen = false;
 let introShootingStarTimer = null;
 let pageShootingStarTimer = null;
+let lastDefaultCustomization = "";
 
 const prefersReducedMotion = window.matchMedia(
   "(prefers-reduced-motion: reduce)"
@@ -59,8 +56,7 @@ const prefersReducedMotion = window.matchMedia(
 
 
 /* =========================================
-   LANGUAGE SYSTEM
-   Reads the language selected on the main site
+   LANGUAGE
 ========================================= */
 
 function getSavedLanguage() {
@@ -71,12 +67,104 @@ function getSavedLanguage() {
   }
 }
 
-function createWhatsAppURL() {
-  const message = currentLanguage === "ar"
-    ? "عايز أعمل صفحة مناسبة مخصصة من 4U celebrations"
-    : "I would like to order a custom occasion page from 4U celebrations";
+function getOrderNumber() {
+  try {
+    let savedNumber = sessionStorage.getItem(ORDER_STORAGE_KEY);
 
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    if (!savedNumber) {
+      const date = new Date();
+      const datePart = [
+        String(date.getFullYear()).slice(-2),
+        String(date.getMonth() + 1).padStart(2, "0"),
+        String(date.getDate()).padStart(2, "0")
+      ].join("");
+
+      const randomPart = Math.random().toString(36).slice(2, 8).toUpperCase();
+
+      savedNumber = `4U-${datePart}-${randomPart}`;
+      sessionStorage.setItem(ORDER_STORAGE_KEY, savedNumber);
+    }
+
+    return savedNumber;
+  } catch (error) {
+    const date = new Date();
+    const datePart = [
+      String(date.getFullYear()).slice(-2),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0")
+    ].join("");
+
+    return `4U-${datePart}-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
+  }
+}
+
+const orderNumber = getOrderNumber();
+
+if (orderNumberElement) {
+  orderNumberElement.textContent = orderNumber;
+}
+
+function getDefaultCustomization(language) {
+  if (language === "en") {
+    return [
+      "Birthday Person: ",
+      "Age: ",
+      "Main Title / Name: ",
+      "Personal Message: ",
+      "Photo Details (5 photos): ",
+      "Music Preference: ",
+      "Additional Notes: "
+    ].join("\n");
+  }
+
+  return [
+    "صاحب عيد الميلاد: ",
+    "العمر: ",
+    "الاسم أو العنوان الرئيسي: ",
+    "الرسالة الشخصية: ",
+    "الموسيقى المطلوبة: ",
+    "تفاصيل إضافية: "
+  ].join("\n");
+}
+
+function updateCustomizationLanguage(language) {
+  if (!customizationText) return;
+
+  const newDefault = getDefaultCustomization(language);
+
+  if (
+    !customizationText.value.trim() ||
+    customizationText.value === lastDefaultCustomization
+  ) {
+    customizationText.value = newDefault;
+  }
+
+  lastDefaultCustomization = newDefault;
+
+  customizationText.placeholder =
+    customizationText.getAttribute(`data-placeholder-${language}`) || "";
+}
+
+function updateMusicButtonText() {
+  if (!musicButtonText || !musicButton || !musicIcon) return;
+
+  if (musicPlaying) {
+    musicButtonText.textContent = currentLanguage === "ar"
+      ? "إيقاف الموسيقى"
+      : "PAUSE THE MUSIC";
+
+    musicButton.classList.add("playing");
+    musicButton.setAttribute("aria-pressed", "true");
+  } else {
+    musicButtonText.textContent = currentLanguage === "ar"
+      ? "شغّل موسيقى الذكريات"
+      : "PLAY THE MUSIC";
+
+    musicButton.classList.remove("playing");
+    musicButton.setAttribute("aria-pressed", "false");
+  }
+
+  musicIcon.textContent = "♫";
 }
 
 function applyLanguage() {
@@ -86,47 +174,40 @@ function applyLanguage() {
   document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
 
   document.querySelectorAll("[data-ar][data-en]").forEach((element) => {
-    const translatedText = element.dataset[currentLanguage];
-
-    if (translatedText !== undefined) {
-      element.textContent = translatedText;
-    }
+    const value = element.getAttribute(`data-${currentLanguage}`);
+    if (value !== null) element.textContent = value;
   });
 
   document.querySelectorAll("[data-ar-label][data-en-label]").forEach((element) => {
-    const translatedLabel = element.dataset[
-      currentLanguage === "ar" ? "arLabel" : "enLabel"
-    ];
-
-    if (translatedLabel) {
-      element.setAttribute("aria-label", translatedLabel);
-    }
+    const key = currentLanguage === "ar" ? "data-ar-label" : "data-en-label";
+    const value = element.getAttribute(key);
+    if (value) element.setAttribute("aria-label", value);
   });
 
   document.title = currentLanguage === "ar"
-    ? "مفاجأة عيد ميلاد | 4U celebrations"
+    ? "مفاجأة عيد ميلاد ولد | 4U celebrations"
     : "Midnight Birthday | 4U celebrations";
 
-  mysteryGift.setAttribute(
-    "aria-label",
-    currentLanguage === "ar" ? "افتح الهدية" : "Open the gift"
-  );
+  if (mysteryGift) {
+    mysteryGift.setAttribute(
+      "aria-label",
+      currentLanguage === "ar" ? "افتح الهدية" : "Open the gift"
+    );
+  }
+
+  const closeButton = document.getElementById("closeModal");
+  if (closeButton) {
+    closeButton.setAttribute(
+      "aria-label",
+      currentLanguage === "ar" ? "إغلاق" : "Close"
+    );
+  }
 
   updateMusicButtonText();
-
-  const whatsappURL = createWhatsAppURL();
-
-  [headerOrder, modalOrderButton, orderButton].forEach((link) => {
-    if (link) {
-      link.href = whatsappURL;
-    }
-  });
+  updateCustomizationLanguage(currentLanguage);
 }
 
 applyLanguage();
-
-
-/* Update if the main website language changes in another tab */
 
 window.addEventListener("storage", (event) => {
   if (event.key === LANGUAGE_KEY || event.key === null) {
@@ -136,7 +217,32 @@ window.addEventListener("storage", (event) => {
 
 
 /* =========================================
-   INTRO STAR FIELD
+   SCROLL TO CUSTOMIZATION
+========================================= */
+
+function scrollToCustomization() {
+  closeAboutModal();
+
+  const section = document.getElementById("customization");
+
+  if (section) {
+    section.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start"
+    });
+  }
+}
+
+document.querySelectorAll("[data-scroll-customization]").forEach((element) => {
+  element.addEventListener("click", (event) => {
+    event.preventDefault();
+    scrollToCustomization();
+  });
+});
+
+
+/* =========================================
+   INTRO STARS
 ========================================= */
 
 function createIntroStars() {
@@ -146,16 +252,13 @@ function createIntroStars() {
 
   for (let i = 0; i < 65; i++) {
     const star = document.createElement("span");
-
     star.className = "intro-star";
-
     star.style.left = `${Math.random() * 100}%`;
     star.style.top = `${Math.random() * 100}%`;
     star.style.animationDelay = `${Math.random() * 4}s`;
     star.style.animationDuration = `${2.5 + Math.random() * 4}s`;
 
     const size = Math.random() > 0.85 ? 3 : 2;
-
     star.style.width = `${size}px`;
     star.style.height = `${size}px`;
 
@@ -169,8 +272,7 @@ createIntroStars();
 
 
 /* =========================================
-   RANDOM WHITE SHOOTING STARS
-   One star approximately every two seconds
+   SHOOTING STARS
 ========================================= */
 
 function createShootingStar(layer, scheduleNext) {
@@ -186,7 +288,6 @@ function createShootingStar(layer, scheduleNext) {
 
   star.style.left = `${Math.random() * 100}%`;
   star.style.top = `${Math.random() * 100}%`;
-
   star.style.setProperty("--shoot-angle", `${angle}deg`);
   star.style.setProperty("--shoot-length", `${length}px`);
   star.style.setProperty("--shoot-duration", `${duration}s`);
@@ -194,27 +295,21 @@ function createShootingStar(layer, scheduleNext) {
 
   layer.appendChild(star);
 
-  star.addEventListener("animationend", () => {
-    star.remove();
-  }, { once: true });
-
+  star.addEventListener("animationend", () => star.remove(), { once: true });
   scheduleNext();
 }
 
 function startIntroShootingStars() {
-  if (!introShootingStars) return;
+  if (!introShootingStars ) return;
 
   const scheduleNext = () => {
     if (!intro || intro.classList.contains("leaving")) return;
 
-    const delay = 1300 + Math.random() * 500;
-
     introShootingStarTimer = window.setTimeout(() => {
       createShootingStar(introShootingStars, scheduleNext);
-    }, delay);
+    }, 1300 + Math.random() * 500);
   };
 
-  // The first star appears shortly after the page loads.
   introShootingStarTimer = window.setTimeout(() => {
     createShootingStar(introShootingStars, scheduleNext);
   }, 700);
@@ -226,11 +321,9 @@ function startPageShootingStars() {
   const scheduleNext = () => {
     if (!mainContent || !mainContent.classList.contains("show")) return;
 
-    const delay = 1300 + Math.random() * 500;
-
     pageShootingStarTimer = window.setTimeout(() => {
       createShootingStar(pageShootingStars, scheduleNext);
-    }, delay);
+    }, 1300 + Math.random() * 500);
   };
 
   pageShootingStarTimer = window.setTimeout(() => {
@@ -242,32 +335,29 @@ startIntroShootingStars();
 
 
 /* =========================================
-   CINEMATIC COUNTDOWN
-   Countdown completes before the gift becomes available
+   COUNTDOWN
 ========================================= */
 
 function updateCountdown(value) {
+  if (!countdownNumber) return;
+
   countdownNumber.textContent = String(value);
-
   countdownNumber.classList.remove("countdown-change");
-
-  // Restart the CSS animation cleanly.
   void countdownNumber.offsetWidth;
-
   countdownNumber.classList.add("countdown-change");
 }
 
 function startCountdown() {
-  let count = 5;
+  if (!intro || !mysteryGift || !countdownNumber) return;
 
+  let count = 5;
   updateCountdown(count);
+  mysteryGift.disabled = true;
 
   countdownTimer = window.setInterval(() => {
     count -= 1;
 
-    if (count >= 0) {
-      updateCountdown(count);
-    }
+    if (count >= 0) updateCountdown(count);
 
     if (count <= 0) {
       window.clearInterval(countdownTimer);
@@ -276,99 +366,62 @@ function startCountdown() {
       window.setTimeout(() => {
         intro.classList.add("ready");
         mysteryGift.disabled = false;
-
         countdownNumber.textContent = "✦";
 
-        introCaption.textContent = currentLanguage === "ar"
-          ? "اللحظة اللي مستنيها وصلت"
-          : "THE MOMENT HAS ARRIVED";
-      },prefersReducedMotion ? 50 : 750);
+        // introCaption is optional because it is commented out in the HTML.
+        if (introCaption) {
+          introCaption.textContent = currentLanguage === "ar"
+            ? "اللحظة اللي مستنيها وصلت"
+            : "THE MOMENT HAS ARRIVED";
+        }
+      }, prefersReducedMotion ? 50 : 750);
     }
-  }, prefersReducedMotion ? 1000 : 1000);
+  }, 1000);
 }
-
-
-/* Keep the gift unavailable until the countdown ends. */
-
-mysteryGift.disabled = true;
 
 startCountdown();
 
 
 /* =========================================
-   OPEN THE GIFT
+   OPEN GIFT
 ========================================= */
 
 function openGift() {
-  if (giftOpened || mysteryGift.disabled) return;
+  if (!intro || !mysteryGift || giftOpened || mysteryGift.disabled) return;
 
   giftOpened = true;
   mysteryGift.disabled = true;
 
-  // Start the music directly from the gift click.
-  // This gives the browser a user interaction to allow playback.
   startMusicAutomatically();
-
   intro.classList.add("opening");
-
-  /*
-    The gift opens first.
-    Then the dark intro fades away while the
-    full website gradually becomes visible.
-  */
-
-  const revealDelay = prefersReducedMotion ? 100 : 1250;
 
   window.setTimeout(() => {
     intro.classList.add("leaving");
 
-    mainContent.classList.add("show");
-    siteHeader.classList.add("visible");
+    if (mainContent) mainContent.classList.add("show");
+    if (siteHeader) siteHeader.classList.add("visible");
 
     startPageShootingStars();
 
     window.setTimeout(() => {
-      if (intro) {
-        intro.style.display = "none";
-      }
+      intro.style.display = "none";
 
       if (introShootingStarTimer) {
         window.clearTimeout(introShootingStarTimer);
         introShootingStarTimer = null;
       }
     }, prefersReducedMotion ? 50 : 1700);
-
-  }, revealDelay);
+  }, prefersReducedMotion ? 100 : 1250);
 }
 
-mysteryGift.addEventListener("click", openGift);
+if (mysteryGift) {
+  mysteryGift.addEventListener("click", openGift);
+}
 
 
 /* =========================================
    MUSIC
 ========================================= */
-
-function updateMusicButtonText() {
-  if (!musicButtonText || !musicButton || !musicIcon) return;
-
-  if (musicPlaying) {
-    musicButtonText.textContent = currentLanguage === "ar"
-      ? "إيقاف الموسيقى"
-      : "PAUSE THE MUSIC";
-
-    musicIcon.textContent = "♫";
-    musicButton.classList.add("playing");
-    musicButton.setAttribute("aria-pressed", "true");
-  } else {
-    musicButtonText.textContent = currentLanguage === "ar"
-      ? "شغّل موسيقى الذكريات"
-      : "PLAY THE MUSIC";
-
-    musicIcon.textContent = "♫";
-    musicButton.classList.remove("playing");
-    musicButton.setAttribute("aria-pressed", "false");
-  }
-}
 
 function startMusicAutomatically() {
   if (!birthdayMusic) return;
@@ -400,65 +453,65 @@ async function toggleMusic() {
 
   try {
     await birthdayMusic.play();
-
     musicPlaying = true;
     updateMusicButtonText();
   } catch (error) {
     musicPlaying = false;
     updateMusicButtonText();
 
-    musicButtonText.textContent = currentLanguage === "ar"
-      ? "تأكد من وجود ملف الموسيقى"
-      : "CHECK THE MUSIC FILE";
+    if (musicButtonText) {
+      musicButtonText.textContent = currentLanguage === "ar"
+        ? "تأكد من وجود ملف الموسيقى"
+        : "CHECK THE MUSIC FILE";
+    }
   }
 }
 
-musicButton.addEventListener("click", toggleMusic);
+if (musicButton) musicButton.addEventListener("click", toggleMusic);
 
-birthdayMusic.addEventListener("ended", () => {
-  musicPlaying = false;
-  updateMusicButtonText();
-});
+if (birthdayMusic) {
+  birthdayMusic.addEventListener("ended", () => {
+    musicPlaying = false;
+    updateMusicButtonText();
+  });
 
-birthdayMusic.addEventListener("pause", () => {
-  musicPlaying = false;
-  updateMusicButtonText();
-});
+  birthdayMusic.addEventListener("pause", () => {
+    musicPlaying = false;
+    updateMusicButtonText();
+  });
 
-birthdayMusic.addEventListener("play", () => {
-  musicPlaying = true;
-  updateMusicButtonText();
-});
+  birthdayMusic.addEventListener("play", () => {
+    musicPlaying = true;
+    updateMusicButtonText();
+  });
+}
 
 
 /* =========================================
-   ABOUT TEMPLATE MODAL
+   ABOUT MODAL
 ========================================= */
 
 function openModal() {
-  if (modalIsOpen) return;
+  if (!aboutModal || modalIsOpen) return;
 
   modalIsOpen = true;
   lastFocusedElement = document.activeElement;
 
   aboutModal.classList.add("open");
   aboutModal.setAttribute("aria-hidden", "false");
-
   document.body.classList.add("modal-open");
 
   window.setTimeout(() => {
-    closeModal.focus();
+    if (closeModal) closeModal.focus();
   }, prefersReducedMotion ? 0 : 100);
 }
 
 function closeAboutModal() {
-  if (!modalIsOpen) return;
+  if (!aboutModal || !modalIsOpen) return;
 
   modalIsOpen = false;
-
   aboutModal.classList.remove("open");
   aboutModal.setAttribute("aria-hidden", "true");
-
   document.body.classList.remove("modal-open");
 
   if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
@@ -466,33 +519,31 @@ function closeAboutModal() {
   }
 }
 
-aboutButton.addEventListener("click", openModal);
-closeModal.addEventListener("click", closeAboutModal);
+if (aboutButton) aboutButton.addEventListener("click", openModal);
+if (closeModal) closeModal.addEventListener("click", closeAboutModal);
 
-aboutModal.addEventListener("click", (event) => {
-  if (event.target === aboutModal) {
-    closeAboutModal();
-  }
-});
+if (aboutModal) {
+  aboutModal.setAttribute("aria-hidden", "true");
+
+  aboutModal.addEventListener("click", (event) => {
+    if (event.target === aboutModal) closeAboutModal();
+  });
+}
 
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && modalIsOpen) {
     closeAboutModal();
   }
 
-  /*
-    Keep keyboard focus inside the modal while it is open.
-  */
-
-  if (event.key === "Tab" && modalIsOpen) {
-    const focusableElements = aboutModal.querySelectorAll(
+  if (event.key === "Tab" && modalIsOpen && aboutModal) {
+    const focusable = aboutModal.querySelectorAll(
       'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
     );
 
-    if (!focusableElements.length) return;
+    if (!focusable.length) return;
 
-    const first = focusableElements[0];
-    const last = focusableElements[focusableElements.length - 1];
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
 
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault();
@@ -506,70 +557,46 @@ document.addEventListener("keydown", (event) => {
 
 
 /* =========================================
-   OLD FLOATING PARTICLES
-   Disabled in favor of shooting stars
+   DISABLED PARTICLES / CONFETTI
 ========================================= */
 
 function createAmbientParticles() {
-  if (!particlesLayer) return;
-  particlesLayer.replaceChildren();
+  if (particlesLayer) particlesLayer.replaceChildren();
 }
-
-
-/* =========================================
-   OLD CONFETTI
-   Disabled in favor of shooting stars
-========================================= */
 
 function createConfetti() {
-  if (!confettiLayer) return;
-  confettiLayer.replaceChildren();
+  if (confettiLayer) confettiLayer.replaceChildren();
 }
 
 
 /* =========================================
-   HIDE PHOTOS THAT HAVE NOT BEEN ADDED YET
+   HIDE MISSING PHOTOS
 ========================================= */
 
 document.querySelectorAll(".memory-card .memory-photo").forEach((image) => {
-  image.addEventListener("error", () => {
+  const hideMissingImage = () => {
     const card = image.closest(".memory-card");
+    if (card) card.classList.add("image-missing");
+  };
 
-    if (card) {
-      card.classList.add("image-missing");
-    }
-  });
+  image.addEventListener("error", hideMissingImage);
 
-  /*
-    If an image is already cached as broken,
-    this handles it when the script runs.
-  */
-
-  if (image.complete && image.naturalWidth === 0 && image.src) {
-    const card = image.closest(".memory-card");
-
-    if (card) {
-      card.classList.add("image-missing");
-    }
+  if (image.complete && image.naturalWidth === 0) {
+    hideMissingImage();
   }
 });
 
 
 /* =========================================
-   OPTIONAL PERSONAL NAME
+   PERSONAL NAME
 ========================================= */
-
-/*
-  To personalize the demo, change YOUR NAME in index.html.
-  This helper only prevents an empty name from appearing.
-*/
 
 function normalizeBirthdayName() {
   if (!birthdayName) return;
 
   const name = birthdayName.textContent.trim();
 
-  if (!name) {
+  if (!name || name.toLowerCase() === "user name") {
     birthdayName.textContent = currentLanguage === "ar"
       ? "اسم صاحب العيد"
       : "YOUR NAME";
@@ -580,8 +607,132 @@ normalizeBirthdayName();
 
 
 /* =========================================
-   INITIAL ACCESSIBILITY & SAFETY
+   BUILD WHATSAPP ORDER MESSAGE
 ========================================= */
 
-aboutModal.setAttribute("aria-hidden", "true");
-musicButton.setAttribute("aria-pressed", "false");
+function getOrderMessage() {
+  const language = getSavedLanguage();
+  const details = customizationText ? customizationText.value.trim() : "";
+
+  const greeting = language === "en"
+    ? "Hello 4U Celebrations,"
+    : "أهلا 4U Celebrations,";
+
+  const orderLabel = language === "en"
+    ? "Order Number:"
+    : "رقم الطلب:";
+
+  const templateLabel = language === "en"
+    ? "Template Name:"
+    : "اسم القالب:";
+
+  const templateName = language === "en"
+    ? "Boy Birthday Template"
+    : "قالب عيد ميلاد ولد";
+
+  return [
+    greeting,
+    "",
+    `${orderLabel} ${orderNumber}`,
+    `${templateLabel} ${templateName}`,
+    "",
+    details
+  ].join("\n");
+}
+
+
+/* =========================================
+   STATUS MESSAGE
+========================================= */
+
+function showStatus(message, isError = false) {
+  if (!formStatus) return;
+
+  formStatus.textContent = message;
+  formStatus.style.color = isError ? "#ffb9c8" : "#b9d6ff";
+}
+
+
+/* =========================================
+   COPY ORDER
+========================================= */
+
+if (copyOrderButton) {
+  copyOrderButton.addEventListener("click", async () => {
+    const message = getOrderMessage();
+    const language = getSavedLanguage();
+
+    try {
+      await navigator.clipboard.writeText(message);
+
+      showStatus(
+        language === "en"
+          ? "Order details copied successfully."
+          : "تم نسخ بيانات الطلب بنجاح"
+      );
+    } catch (error) {
+      const temporaryTextarea = document.createElement("textarea");
+      temporaryTextarea.value = message;
+      temporaryTextarea.style.position = "fixed";
+      temporaryTextarea.style.opacity = "0";
+
+      document.body.appendChild(temporaryTextarea);
+      temporaryTextarea.select();
+
+      let copied = false;
+
+      try {
+        copied = document.execCommand("copy");
+      } catch (copyError) {
+        copied = false;
+      }
+
+      temporaryTextarea.remove();
+
+      showStatus(
+        copied
+          ? (language === "en" ? "Order details copied." : "تم نسخ بيانات الطلب")
+          : (language === "en"
+              ? "Copy failed. Please copy the text manually."
+              : "النسخ لم ينجح، انسخ النص يدويًا من فضلك"),
+        !copied
+      );
+    }
+  });
+}
+
+
+/* =========================================
+   SEND ORDER TO WHATSAPP
+========================================= */
+
+if (sendOrderButton) {
+  sendOrderButton.addEventListener("click", () => {
+    const language = getSavedLanguage();
+    const details = customizationText ? customizationText.value.trim() : "";
+
+    if (!details) {
+      showStatus(
+        language === "en"
+          ? "Please fill in your order details first."
+          : "اكتب بيانات طلبك الأول من فضلك",
+        true
+      );
+
+      if (customizationText) customizationText.focus();
+      return;
+    }
+
+    const message = getOrderMessage();
+    const whatsappURL =
+      `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+    showStatus(
+      language === "en"
+        ? "WhatsApp is opening. Review the message and press Send."
+        : "واتساب هيفتح دلوقتي، راجع الرسالة واضغط إرسال"
+    );
+
+    window.open(whatsappURL, "_blank", "noopener,noreferrer");
+  });
+}
